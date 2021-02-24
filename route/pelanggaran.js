@@ -119,4 +119,3 @@ app.delete("/:id_pelanggaran", (req,res) => {
 })
 
 module.exports = app
-
