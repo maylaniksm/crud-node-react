@@ -2,13 +2,13 @@ const express = require("express")
 const app = express()
 const bodyParser = require("body-parser")
 const cors = require("cors")
-const db = require("../config") //import konfigurasi database
+const db = require("../config")
 
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-// GET: /pelanggaran --> end point untuk mengakses data pelanggaran
+
 app.get("/", (req,res) => {
     let sql = "SELECT s.id_siswa, s.nis, s.nama_siswa, s.kelas, s.jurusan, s.poin, " +
     "j.nama_jurusan, j.kepanjangan " +
@@ -30,7 +30,7 @@ app.get("/", (req,res) => {
 })
 
 app.get("/jurusan", (req,res) => {
-    let sql = "SELECT * from jurusan"
+    let sql = "select * from jurusan"
     db.query(sql, (err, result) => {
         if (err) {
             throw err
@@ -47,10 +47,10 @@ app.get("/jurusan", (req,res) => {
     })
 })
 
-// POST: /pelanggaran --> end point untuk pencarian data pelanggaran
+
 app.post("/", (req,res) => {
     let find = req.body.find
-    let sql = "select * from siswa where id_siswa like '%"+find+"%' or nis like '%"+find+"%' or nama_siswa like '%"+find+"%' or kelas like '%"+find+"%' or jurusan like '%"+find+"%' or poin like '%"+find+"%'"
+    let sql =  "select * FROM siswa s JOIN jurusan j ON s.jurusan = j.id_jurusan  where id_siswa like '%"+find+"%' or nis like '%"+find+"%' or nama_siswa like '%"+find+"%' or kelas like '%"+find+"%' or jurusan like '%"+find+"%' or poin like '%"+find+"%'"
     db.query(sql, (err, result) => {
         if (err) {
             throw err
@@ -66,7 +66,7 @@ app.post("/", (req,res) => {
     })
 })
 
-// POST: /pelanggaran/save --> end point untuk insert data pelanggaran
+
 app.post("/save", (req,res) => {
     let data = {
         id_siswa: req.body.id_siswa,
@@ -94,7 +94,7 @@ app.post("/save", (req,res) => {
     })
 })
 
-// POST: /pelanggaran/update --> end point untuk update data pelanggaran
+
 app.post("/update", (req,res) => {
     let data = [{
         id_siswa: req.body.id_siswa,
@@ -122,7 +122,7 @@ app.post("/update", (req,res) => {
     })
 })
 
-// DELETE: /pegawai/:id_pegawai --> end point untuk hapus data pegawai
+
 app.delete("/:id_siswa", (req,res) => {
     let data = {
         id_siswa : req.params.id_siswa
